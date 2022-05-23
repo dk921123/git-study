@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boardexample.mapper.BoardMapper">
+	
+	<select id="getTotalCount" resultType="int">
+  		SELECT COUNT(*) FROM TEST.TBL_BOARD
+    </select>
+	
+    <select id="selectBoardList" resultType="com.boardexample.domain.BoardVO">
+	    <![CDATA[
+	        SELECT
+	            BNO, TITLE, USERNAME, CONTENT, REGDATE, UPDATEDATE
+	        FROM 
+	            TEST.TBL_BOARD
+	       
+	    ]]>
+	       
+	    <![CDATA[  
+	        ORDER BY 
+	            BNO DESC
+	        LIMIT #{amount}
+	        OFFSET (#{pageNum}-1) * 10		
+	    ]]>   
+      </select>
+  
+    <select id="selectBoard" resultType="com.boardexample.domain.BoardVO">
+        SELECT
+            BNO, TITLE, USERNAME, CONTENT, REGDATE, UPDATEDATE
+        FROM 
+            TEST.TBL_BOARD
+        WHERE
+            BNO = #{bno}
+    </select>
+  
+    <insert id="insertBoard">
+        <selectKey resultType="int" keyProperty="bno" order="BEFORE">
+        SELECT NEXTVAL FOR TEST.SEQ_TBL_BOARD FROM SYSIBM.SYSDUMMY1;            
+        </selectKey>
+        INSERT INTO TEST.TBL_BOARD(BNO, TITLE, USERNAME, CONTENT)
+        VALUES(#{bno}, #{title}, #{userName}, #{content})
+    </insert>
+  
+    <update id="updateBoard">
+        UPDATE
+            TEST.TBL_BOARD
+        SET
+            TITLE = #{title},
+            CONTENT = #{content},
+            UPDATEDATE = CURRENT DATE
+        WHERE
+            BNO = #{bno}
+    </update>
+  
+    <delete id="deleteBoard">
+        DELETE FROM
+            TEST.TBL_BOARD
+        WHERE
+            BNO = #{bno}
+    </delete>
+  
+</mapper>

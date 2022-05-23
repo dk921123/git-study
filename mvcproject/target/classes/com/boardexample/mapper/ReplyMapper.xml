@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boardexample.mapper.ReplyMapper">
+	
+	<select id="selectReplyList" resultType="com.boardexample.domain.ReplyVO">
+		SELECT
+			BNO, RNO, USERNAME, REPLY, REGDATE, UPDATEDATE
+		FROM
+			TEST.TBL_REPLY
+		WHERE
+			BNO =#{bno}
+	</select>
+	
+	<select id="selectReply" resultType="com.boardexample.domain.ReplyVO">
+		SELECT
+			BNO, RNO, USERNAME, REPLY, REGDATE, UPDATEDATE
+		FROM
+			TEST.TBL_REPLY
+		WHERE
+			RNO = #{rno}
+	</select>
+	
+	<insert id="insertReply">
+		<selectKey resultType="int" keyProperty="rno" order="BEFORE">
+	    	SELECT NEXTVAL FOR TEST.SEQ_TBL_REPLY FROM SYSIBM.SYSDUMMY1;            
+	    </selectKey>
+		INSERT INTO TEST.TBL_REPLY(BNO, RNO, USERNAME, REPLY)
+	   	VALUES(#{bno}, #{rno}, #{userName}, #{reply})
+	</insert>
+	
+	<update id="updateReply">
+		UPDATE
+        	TEST.TBL_REPLY
+        SET
+            REPLY = #{reply},
+            UPDATEDATE = CURRENT DATE
+        WHERE
+            RNO = #{rno}
+  
+	</update>
+  
+	<delete id="deleteReply">
+    	DELETE FROM
+    		TEST.TBL_REPLY
+        WHERE
+            RNO = #{rno}
+	</delete>
+		
+</mapper>
